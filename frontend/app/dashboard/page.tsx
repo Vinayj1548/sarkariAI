@@ -1,10 +1,14 @@
-// dashboard to be seen after login
-
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import api from "axios";
+// Your axios instance
 
 export default function Dashboard() {
+  const router = useRouter();
+
+  const [checkingAuth, setCheckingAuth] = useState(true);
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
 
@@ -15,6 +19,32 @@ export default function Dashboard() {
     qualification: "",
     graduationYear: "",
   });
+
+  useEffect(() => {
+    const verifyUser = async () => {
+      const token = localStorage.getItem("token");
+
+      if (!token) {
+        router.replace("/login");
+        return;
+      }
+
+      try {
+        // This route should be protected by your JWT middleware
+        await api.get("/auth/me");
+
+        setCheckingAuth(false);
+      } catch (error) {
+        localStorage.removeItem("token");
+        localStorage.removeItem("userId");
+        localStorage.removeItem("fullName");
+
+        router.replace("/login");
+      }
+    };
+
+    verifyUser();
+  }, [router]);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -33,7 +63,7 @@ export default function Dashboard() {
     setLoading(true);
 
     try {
-      // await axios.post("/api/profile", formData);
+      // await api.post("/profile", formData);
 
       await new Promise((resolve) =>
         setTimeout(resolve, 1500)
@@ -41,11 +71,21 @@ export default function Dashboard() {
 
       setSubmitted(true);
     } catch (err) {
-      console.log(err);
+      console.error(err);
     } finally {
       setLoading(false);
     }
   };
+
+  if (checkingAuth) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-linear-to-br from-blue-600 via-blue-500 to-cyan-400">
+        <h1 className="text-2xl font-semibold text-white">
+          Verifying Authentication...
+        </h1>
+      </div>
+    );
+  }
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-linear-to-br from-blue-600 via-blue-500 to-cyan-400 p-6">
@@ -126,8 +166,7 @@ export default function Dashboard() {
             </h2>
 
             <p className="mt-4 text-blue-100">
-              Analyzing your profile and searching for
-              relevant government jobs...
+              Analyzing your profile and searching for relevant government jobs...
             </p>
           </div>
         )}

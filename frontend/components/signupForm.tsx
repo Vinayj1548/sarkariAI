@@ -1,8 +1,11 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
+import axios from "axios";
 
 export default function SignupForm() {
+  const router = useRouter();
   const [formData, setFormData] = useState({
     fullName: "",
     email: "",
@@ -17,7 +20,7 @@ export default function SignupForm() {
     }));
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: any) => {
     e.preventDefault();
 
     if (formData.password !== formData.confirmPassword) {
@@ -25,10 +28,23 @@ export default function SignupForm() {
       return;
     }
 
-    console.log(formData);
+    // console.log(formData);
 
     // API Call Here
-    // await axios.post("/api/auth/signup", formData);
+
+    const response = await axios.post("http://localhost:5000/api/auth/signup", {
+      fullName: formData.fullName,
+      email: formData.email,
+      password: formData.password,
+    });
+
+    const data = response.data;
+
+    localStorage.setItem("token", data.token);
+    localStorage.setItem("userId", data.user._id);
+    localStorage.setItem("fullName", data.user.fullName);
+
+    router.push("/dashboard");
   };
 
   return (
