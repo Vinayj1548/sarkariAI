@@ -3,6 +3,7 @@ import cors from "cors";
 
 import authRoutes from "./src/routes/auth.routes";
 import profileRoutes from "./src/routes/profile.routes";
+import jobsRoutes from "./src/routes/jobs.routes";
 
 const app = express();
 
@@ -18,6 +19,11 @@ app.use(
 app.use(
   "/api/profile",
   profileRoutes
+);
+
+app.use(
+  "/api/jobs",
+  jobsRoutes
 );
 
 export default app;
