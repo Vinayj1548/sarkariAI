@@ -1,23 +1,24 @@
-import { Request , Response } from "express";
-import { jobs } from "../data/jobs";
+import { Request, Response } from "express";
+import { filterJobsService } from "../services/jobs.service";
 
-export const filterJobs = async (
-    req: Request,
-    res: Response
+export const filterJobs = (
+  req: Request,
+  res: Response
 ) => {
-    try{
-        // console.log(req.body);
-        console.log(jobs);
+  try {
+    const filteredJobs = filterJobsService(req.body);
 
-        return res.status(200).json({
-            success:true,
-            message: "filter api working",
-            recievedData : req.body,
-        });
-    }catch(error){
-        return res.status(500).json({
-            success:false,
-            message: "Internal Server Error"
-        });
-    }
+    return res.status(200).json({
+      success: true,
+      totalJobs: filteredJobs.length,
+      jobs: filteredJobs,
+    });
+  } catch (error) {
+    console.error(error);
+
+    return res.status(500).json({
+      success: false,
+      message: "Internal Server Error",
+    });
+  }
 };
