@@ -1,13 +1,13 @@
 from scrapers.base_scraper import BaseScraper
-
 from extractors.notification_extractor import NotificationExtractor
+from downloaders.pdf_downloader import PDFDownloader
 
 
 class SSCScraper(BaseScraper):
 
     def start(self):
 
-        print("Opening SSC Website...")
+        print("Opening SSC Website...\n")
 
         self.open("https://ssc.gov.in")
 
@@ -17,20 +17,14 @@ class SSCScraper(BaseScraper):
 
         notifications = extractor.extract()
 
-        print()
+        downloader = PDFDownloader()
 
-        print("=" * 60)
+        # Download only first notification
+        pdf_path = downloader.download(
+            self.page,
+            notifications[0]
+        )
 
-        print("Notifications Found")
-
-        print("=" * 60)
-
-        for notification in notifications:
-
-            print()
-
-            print(notification.title)
-
-            print(notification.pdf_size)
+        print(f"\nSaved To: {pdf_path}")
 
         self.close()

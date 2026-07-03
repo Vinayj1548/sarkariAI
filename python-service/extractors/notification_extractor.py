@@ -1,12 +1,10 @@
 from playwright.sync_api import Page
-
 from models.notification import Notification
 
 
 class NotificationExtractor:
 
     def __init__(self, page: Page):
-
         self.page = page
 
     def extract(self):
@@ -14,7 +12,6 @@ class NotificationExtractor:
         notifications = []
 
         titles = self.page.locator(".text")
-
         icons = self.page.locator(".icons")
 
         count = titles.count()
@@ -33,18 +30,19 @@ class NotificationExtractor:
                 .strip()
             )
 
+            # Last span contains the eye icon
+            eye_button = (
+                icon_section
+                .locator("span")
+                .last
+            )
+
             notifications.append(
-
                 Notification(
-
                     title=title,
-
                     pdf_size=pdf_size,
-
-                    icon_section=icon_section
-
+                    eye_button=eye_button
                 )
-
             )
 
         return notifications

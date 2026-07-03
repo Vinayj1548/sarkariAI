@@ -6,4 +6,4 @@ from playwright.sync_api import Locator
 class Notification:
     title: str
     pdf_size: str
-    container: Locator
+    eye_button: Locator
