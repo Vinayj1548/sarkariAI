@@ -1,6 +1,20 @@
 from typing import List, Optional
+from pydantic import BaseModel, Field
 
-from pydantic import BaseModel
+
+class Post(BaseModel):
+    name: str
+    vacancies: Optional[int] = None
+
+
+class ImportantDate(BaseModel):
+    description: str
+    date: Optional[str] = None
+
+
+class ImportantLink(BaseModel):
+    description: str
+    url: str
 
 
 class AgeLimit(BaseModel):
@@ -8,15 +22,12 @@ class AgeLimit(BaseModel):
     maximum: Optional[int] = None
 
 
-class ImportantDate(BaseModel):
-    event: str
-    date: str
-
-
 class Notification(BaseModel):
 
     organization: Optional[str] = None
+
     notification_name: Optional[str] = None
+
     notification_number: Optional[str] = None
 
     official_website: Optional[str] = None
@@ -24,20 +35,21 @@ class Notification(BaseModel):
     vacancies: Optional[int] = None
 
     application_start_date: Optional[str] = None
+
     application_end_date: Optional[str] = None
 
     exam_date: Optional[str] = None
 
     salary: Optional[str] = None
 
-    qualification: List[str] = []
+    qualification: List[str] = Field(default_factory=list)
 
-    posts: List[str] = []
+    posts: List[Post] = Field(default_factory=list)
 
-    age_limit: AgeLimit = AgeLimit()
+    age_limit: AgeLimit = Field(default_factory=AgeLimit)
 
-    selection_process: List[str] = []
+    selection_process: List[str] = Field(default_factory=list)
 
-    important_dates: List[ImportantDate] = []
+    important_dates: List[ImportantDate] = Field(default_factory=list)
 
-    important_links: List[str] = []
+    important_links: List[ImportantLink] = Field(default_factory=list)

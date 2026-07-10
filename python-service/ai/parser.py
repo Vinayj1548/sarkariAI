@@ -1,7 +1,7 @@
 import json
 
-from client import client
-from prompts import PARSER_PROMPT
+from ai.client import client
+from ai.prompts import PARSER_PROMPT
 from models.ai_notification import Notification
 
 
@@ -32,3 +32,5 @@ class NotificationParser:
         notification = Notification.model_validate(data)
 
         return notification
+
+    
