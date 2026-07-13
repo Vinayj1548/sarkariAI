@@ -79,5 +79,5 @@ Important Instructions:
 
 Notification:
 
-{text}
+{{TEXT}}
 """

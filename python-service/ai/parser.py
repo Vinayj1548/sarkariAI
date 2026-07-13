@@ -3,6 +3,7 @@ import json
 from ai.client import client
 from ai.prompts import PARSER_PROMPT
 from models.ai_notification import Notification
+from pydantic import ValidationError
 
 
 class NotificationParser:
@@ -27,10 +28,17 @@ class NotificationParser:
 
         response_text = response_text.strip()
 
-        data = json.loads(response_text)
+        try:
+            data = json.loads(response_text)
+            notification = Notification.model_validate(data)
+            return notification
 
-        notification = Notification.model_validate(data)
+        except json.JSONDecodeError as e:
+            raise ValueError(f"Gemini returned invalid JSON: {e}")
 
-        return notification
+        except ValidationError as e:
+            raise ValueError(f"Notification validation failed: {e}")
+
+        
 
     
