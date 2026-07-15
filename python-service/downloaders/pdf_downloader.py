@@ -9,7 +9,7 @@ class PDFDownloader:
 
     def __init__(self):
 
-        self.download_folder = Path("downloads/pdfs")
+        self.download_folder = Path("saved/pdfs")
 
         self.download_folder.mkdir(
             parents=True,
