@@ -1,6 +1,7 @@
 import json
 
 from ai.client import client
+from ai.normalizer import AIResponseNormalizer
 from ai.prompts import PARSER_PROMPT
 from models.ai_notification import Notification
 from pydantic import ValidationError
@@ -29,7 +30,11 @@ class NotificationParser:
         response_text = response_text.strip()
 
         try:
+            print("========== RAW RESPONSE ==========")
+            print(response_text)
+            print("==================================")
             data = json.loads(response_text)
+            data = AIResponseNormalizer.normalize(data)
             notification = Notification.model_validate(data)
             return notification
 
