@@ -1,14 +1,16 @@
 import fitz
 
-pdf_path = "saved/pdfs/ssc_notification.pdf"
-doc = fitz.open(pdf_path)
 
-text = ""
+class TextExtractor:
 
-for page in doc:
-    text += page.get_text()
+    @staticmethod
+    def extract(pdf_path: str) -> str:
 
-with open("saved/pdfs/output.txt", "w", encoding="utf-8") as f:
-    f.write(text)
+        doc = fitz.open(pdf_path)
 
-print("Text extracted successfully!")
+        text = ""
+
+        for page in doc:
+            text += page.get_text()
+
+        return text

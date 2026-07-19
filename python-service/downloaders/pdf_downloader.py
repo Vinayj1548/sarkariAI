@@ -1,7 +1,6 @@
 from pathlib import Path
 import re
 import requests
-
 from models.notification import Notification
 
 
@@ -9,7 +8,7 @@ class PDFDownloader:
 
     def __init__(self):
 
-        self.download_folder = Path("saved/pdfs")
+        self.download_folder = Path("data/pdfs")
 
         self.download_folder.mkdir(
             parents=True,
